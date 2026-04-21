@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NetSI PhD Annual Student Review — Spring 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f0ede8; color: #1a1a18; font-size: 14px; line-height: 1.5; min-height: 100vh; }
+.page { max-width: 820px; margin: 0 auto; padding: 24px 16px 60px; }
+.hdr { background: #ffffff; border-radius: 12px; border: 0.5px solid rgba(0,0,0,0.12); padding: 18px 22px 14px; margin-bottom: 12px; }
+.hdr h1 { font-size: 20px; font-weight: 600; color: #1a1a18; }
+.hdr p { font-size: 13px; color: #5a5a56; margin-top: 4px; }
+.controls { background: #ffffff; border: 0.5px solid rgba(0,0,0,0.12); border-radius: 12px; padding: 12px 16px; margin-bottom: 8px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.controls input[type=text] { flex: 1; min-width: 180px; height: 34px; padding: 0 10px; font-size: 13px; font-family: inherit; border: 0.5px solid rgba(0,0,0,0.22); border-radius: 8px; background: #ffffff; color: #1a1a18; outline: none; }
+.controls input[type=text]:focus { border-color: #378ADD; }
+.controls select { height: 34px; padding: 0 10px; font-size: 13px; font-family: inherit; border: 0.5px solid rgba(0,0,0,0.22); border-radius: 8px; background: #ffffff; color: #1a1a18; outline: none; cursor: pointer; }
+.export-row { background: #f7f7f5; border: 0.5px solid rgba(0,0,0,0.12); border-radius: 12px; padding: 10px 16px; margin-bottom: 8px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.export-label { font-size: 12px; color: #5a5a56; margin-right: 2px; }
+.export-btn { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-family: inherit; padding: 0 12px; height: 30px; border-radius: 8px; border: 0.5px solid rgba(0,0,0,0.22); background: #ffffff; color: #1a1a18; cursor: pointer; white-space: nowrap; transition: background 0.1s; }
+.export-btn:hover { background: #f7f7f5; }
+.sumbar { background: #f7f7f5; border: 0.5px solid rgba(0,0,0,0.12); border-radius: 12px; padding: 8px 16px; margin-bottom: 12px; display: flex; gap: 12px; flex-wrap: wrap; }
+.stat { font-size: 13px; color: #5a5a56; }
+.stat strong { color: #1a1a18; font-weight: 500; }
+.loading { text-align: center; padding: 60px 20px; color: #9a9a94; font-size: 14px; }
+.loading-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #9a9a94; margin: 0 3px; animation: pulse 1.2s ease-in-out infinite; }
+.loading-dot:nth-child(2) { animation-delay: 0.2s; }
+.loading-dot:nth-child(3) { animation-delay: 0.4s; }
+@keyframes pulse { 0%,80%,100% { opacity: 0.3; } 40% { opacity: 1; } }
+.error-box { background: #FCEBEB; border: 0.5px solid #F09595; border-radius: 12px; padding: 20px 24px; color: #A32D2D; font-size: 13px; line-height: 1.7; }
+.error-box strong { font-weight: 600; display: block; margin-bottom: 6px; font-size: 14px; }
+.error-box code { font-family: monospace; background: rgba(0,0,0,0.06); padding: 2px 6px; border-radius: 4px; }
+.toast { position: fixed; top: 16px; right: 16px; background: #ffffff; border: 0.5px solid rgba(0,0,0,0.22); border-radius: 8px; padding: 10px 16px; font-size: 13px; color: #1a1a18; opacity: 0; transition: opacity 0.2s; pointer-events: none; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.12); }
+.toast.show { opacity: 1; }
+.list { display: flex; flex-direction: column; gap: 12px; }
+.card { background: #ffffff; border: 0.5px solid rgba(0,0,0,0.12); border-radius: 12px; overflow: hidden; }
+.card.open { border-color: rgba(0,0,0,0.36); }
+.ch { display: flex; align-items: center; gap: 12px; padding: 14px 18px; cursor: pointer; user-select: none; }
+.ch:hover { background: #f7f7f5; }
+.av { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; flex-shrink: 0; }
+.cm { flex: 1; min-width: 0; }
+.cn { font-size: 15px; font-weight: 500; color: #1a1a18; }
+.ca { font-size: 12px; color: #5a5a56; margin-top: 2px; }
+.badges { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; margin-left: auto; }
+.bx { font-size: 11px; padding: 3px 10px; border-radius: 99px; font-weight: 500; white-space: nowrap; }
+.bsat { background: #EAF3DE; color: #3B6D11; }
+.bmrg { background: #FAEEDA; color: #854F0B; }
+.buns { background: #FCEBEB; color: #A32D2D; }
+.bnone { background: #f7f7f5; color: #5a5a56; border: 0.5px solid rgba(0,0,0,0.12); }
+.blv { background: #FAEEDA; color: #854F0B; }
+.ei { font-size: 12px; color: #9a9a94; margin-left: 8px; display: inline-block; transition: transform 0.15s; }
+.card.open .ei { transform: rotate(180deg); }
+.body { border-top: 0.5px solid rgba(0,0,0,0.12); display: none; }
+.card.open .body { display: block; }
+.edit-hint { font-size: 11px; color: #9a9a94; padding: 6px 18px; font-style: italic; border-bottom: 0.5px solid rgba(0,0,0,0.12); background: #f7f7f5; }
+.sgrp { border-bottom: 0.5px solid rgba(0,0,0,0.12); }
+.sgrp-hdr { display: flex; align-items: center; justify-content: space-between; padding: 9px 18px; cursor: pointer; user-select: none; }
+.sgrp-title { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; }
+.sgrp-ei { font-size: 11px; transition: transform 0.15s; color: #5a5a56; }
+.sgrp.collapsed .sgrp-ei { transform: rotate(-90deg); }
+.sgrp-body { display: block; }
+.sgrp.collapsed .sgrp-body { display: none; }
+.sgrp-overview .sgrp-hdr { background: #EDECEA; }
+.sgrp-overview .sgrp-title { color: #444441; }
+.sgrp-fac .sgrp-hdr { background: #E6F1FB; }
+.sgrp-fac .sgrp-title { color: #0C447C; }
+.sgrp-self .sgrp-hdr { background: #EEEDFE; }
+.sgrp-self .sgrp-title { color: #3C3489; }
+.sgrp-next .sgrp-hdr { background: #E1F5EE; }
+.sgrp-next .sgrp-title { color: #085041; }
+.sgrp-feedback .sgrp-hdr { background: #EDECEA; }
+.sgrp-feedback .sgrp-title { color: #444441; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; }
+.field { padding: 12px 18px; border-bottom: 0.5px solid rgba(0,0,0,0.12); }
+.field:nth-child(odd) { border-right: 0.5px solid rgba(0,0,0,0.12); }
+.field-full { padding: 12px 18px; border-bottom: 0.5px solid rgba(0,0,0,0.12); }
+.field-full:last-child { border-bottom: none; }
+.fl { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #9a9a94; margin-bottom: 6px; }
+.ms-wrap { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 4px; }
+.ms-tag { font-size: 11px; padding: 3px 9px; border-radius: 8px; background: #E6F1FB; color: #0C447C; }
+.hl-box { background: #f7f7f5; border-left: 3px solid #85B7EB; padding: 8px 12px; border-radius: 0 8px 8px 0; }
+.hlw-box { background: #FAEEDA; border-left: 3px solid #EF9F27; padding: 8px 12px; border-radius: 0 8px 8px 0; }
+textarea { width: 100%; font-size: 13px; color: #1a1a18; background: #ffffff; border: 0.5px solid transparent; border-radius: 8px; padding: 5px 7px; line-height: 1.6; resize: vertical; font-family: inherit; min-height: 36px; transition: border-color 0.1s; outline: none; }
+textarea:hover { border-color: rgba(0,0,0,0.12); }
+textarea:focus { border-color: rgba(0,0,0,0.22); background: #f7f7f5; }
+.edited textarea { border-color: #EF9F27 !important; }
+.hl-box textarea, .hlw-box textarea { background: transparent; }
+select.rating-sel { font-size: 13px; font-family: inherit; padding: 5px 9px; border-radius: 8px; border: 0.5px solid rgba(0,0,0,0.22); background: #ffffff; color: #1a1a18; height: 32px; outline: none; cursor: pointer; }
+.official-wrap { padding: 12px 18px; border-bottom: 0.5px solid rgba(0,0,0,0.12); }
+.official-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: #27500A; margin-bottom: 8px; display: flex; align-items: center; gap: 7px; }
+.official-dot { width: 8px; height: 8px; border-radius: 50%; background: #639922; flex-shrink: 0; }
+.official-box { background: #EAF3DE; border: 1px solid #97C459; border-radius: 8px; }
+.official-box textarea { background: transparent; border: none; color: #1E4010; font-weight: 500; min-height: 76px; padding: 10px 12px; font-size: 13px; line-height: 1.7; }
+.official-box textarea:focus { background: rgba(255,255,255,0.5); border: none; }
+.official-box textarea::placeholder { color: #7AB548; font-weight: 400; font-style: italic; }
+.nr { text-align: center; padding: 40px; color: #9a9a94; font-size: 14px; }
+@media (max-width: 600px) { .grid2 { grid-template-columns: 1fr; } .field:nth-child(odd) { border-right: none; } }
+@media print { body { background: white; } .page { padding: 0; max-width: 100%; } .controls, .export-row, .sumbar { display: none; } .card.open .body { display: block !important; } }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="toast" id="toast"></div>
+  <div class="hdr">
+    <h1>NetSI PhD Annual Student Review &mdash; Spring 2026</h1>
+    <p>Data pulled as of 4/21 at 10am &nbsp;&middot;&nbsp; Click any field to edit &nbsp;&middot;&nbsp; <span id="tc">loading...</span> students with faculty reviews</p>
+  </div>
+  <div class="controls">
+    <input type="text" id="srch" placeholder="Search by student or advisor name&hellip;" />
+    <select id="fr"><option value="">All ratings</option><option value="Satisfactory">Satisfactory</option><option value="Marginal">Marginal</option><option value="Unsatisfactory">Unsatisfactory</option><option value="none">No faculty review</option></select>
+    <select id="fs"><option value="">All statuses</option><option value="Active and in good standing">Active &mdash; good standing</option><option value="On Leave">On leave</option></select>
+  </div>
+  <div class="export-row">
+    <span class="export-label">Export:</span>
+    <button class="export-btn" onclick="exportAll('copy')">&#x2398; Copy all</button>
+    <button class="export-btn" onclick="exportAll('txt')">&#x2913; Download .txt</button>
+    <button class="export-btn" onclick="exportAll('csv')">&#x2913; Download .csv</button>
+    <button class="export-btn" onclick="exportCurrent()">&#x23F1; Export visible only</button>
+  </div>
+  <div class="sumbar" id="sb"></div>
+  <div class="list" id="sl"><div class="loading"><span class="loading-dot"></span><span class="loading-dot"></span><span class="loading-dot"></span><p style="margin-top:16px">Loading student data&hellip;</p></div></div>
+</div>
+<script>
+const ADVISOR_COLORS={
+  "Dima Krioukov":{bg:"#EEEDFE",c:"#3C3489"},
+  "Michael Johansson":{bg:"#FAECE7",c:"#712B13"},
+  "Alina Lungeanu":{bg:"#E6F1FB",c:"#0C447C"},
+  "Albert-László Barabási":{bg:"#FBEAF0",c:"#72243E"},
+  "Sunny Yang":{bg:"#EDECEA",c:"#444441"},
+  "Brooke Welles":{bg:"#FAEEDA",c:"#633806"},
+  "Esteban Moro":{bg:"#E1F5EE",c:"#085041"},
+  "Mauricio Santillana":{bg:"#EAF3DE",c:"#27500A"},
+  "Matteo Chinazzi":{bg:"#FAC775",c:"#412402"},
+  "Samuel V. Scarpino":{bg:"#F4C0D1",c:"#4B1528"},
+  "David Lazer":{bg:"#B5D4F4",c:"#042C53"},
+  "Alessandro Vespignani":{bg:"#9FE1CB",c:"#04342C"},
+  "Brennan Klein":{bg:"#F7C1C1",c:"#501313"},
+  "Seo Eun Yang":{bg:"#D3D1C7",c:"#2C2C2A"}
+};
+
+let data=[];
+let visibleIndices=[];
+
+function avColor(a){for(const k in ADVISOR_COLORS){if(a.includes(k))return ADVISOR_COLORS[k];}return{bg:"#E6F1FB",c:"#0C447C"};}
+function ini(n){return n.split(" ").filter(w=>w).slice(0,2).map(w=>w[0].toUpperCase()).join("");}
+function hasFac(s){return s.research_fac!==null&&s.research_fac!==undefined;}
+function hasSelf(s){return s.publications!==null&&s.publications!==undefined;}
+function isEmpty(v){return !v||["null","—","N/A","n/a","NA","None","none",""].includes(String(v).trim());}
+function showToast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2400);}
+function autoH(ta){ta.style.height="auto";ta.style.height=ta.scrollHeight+"px";}
+function makeTA(idx,key,val){const v=isEmpty(val)?"":String(val);return`<textarea data-idx="${idx}" data-key="${key}" rows="1">${v}</textarea>`;}
+function ratingBadge(r){if(r==="Satisfactory")return'<span class="bx bsat">Satisfactory</span>';if(r==="Marginal")return'<span class="bx bmrg">Marginal</span>';if(r==="Unsatisfactory")return'<span class="bx buns">Unsatisfactory</span>';return'<span class="bx bnone">No faculty review</span>';}
+function statusBadge(s){return s==="On Leave"?'<span class="bx blv">On leave</span>':'' ;}
+window.toggleSec=function(hdr){hdr.closest(".sgrp").classList.toggle("collapsed");};
+window.tog=function(i){const c=document.getElementById("c"+i);c.classList.toggle("open");if(c.classList.contains("open"))c.querySelectorAll("textarea").forEach(autoH);};
+
+function buildCard(s,idx){
+  const ac=avColor(s.advisor);const fac=hasFac(s),self=hasSelf(s);const isWarn=s.rating==="Marginal"||s.rating==="Unsatisfactory";
+  const allMs=[...new Set([...(s.milestones_fac||[]),...(s.milestones_self||[])])];
+  const milHtml=allMs.length?'<div class="ms-wrap">'+allMs.map(m=>`<span class="ms-tag">${m}</span>`).join("")+'</div>':'<span style="font-size:13px;color:#9a9a94">None recorded</span>';
+  const ratingEl=fac?`<select class="rating-sel" data-idx="${idx}" data-key="rating"><option value="Satisfactory"${s.rating==="Satisfactory"?" selected":""}>Satisfactory</option><option value="Marginal"${s.rating==="Marginal"?" selected":""}>Marginal</option><option value="Unsatisfactory"${s.rating==="Unsatisfactory"?" selected":""}>Unsatisfactory</option></select>`:ratingBadge(s.rating);
+  const commentEl=isWarn?`<div class="hlw-box">${makeTA(idx,"comment",s.comment)}</div>`:`<div class="hl-box">${makeTA(idx,"comment",s.comment)}</div>`;
+  const officialEl=`<div class="official-wrap"><div class="official-label"><span class="official-dot"></span>Academic Review Committee Official Comment</div><div class="official-box"><textarea data-idx="${idx}" data-key="official_comment" rows="3" placeholder="Type the official committee comment here — approximately 2-3 sentences...">${s.official_comment||""}</textarea></div></div>`;
+  const overviewSec=`<div class="sgrp sgrp-overview"><div class="sgrp-hdr" onclick="toggleSec(this)"><span class="sgrp-title">Overview</span><span class="sgrp-ei">&#9660;</span></div><div class="sgrp-body"><div class="grid2"><div class="field"><div class="fl">Student status</div><p style="font-size:13px;color:#5a5a56">${s.status}</p></div><div class="field"><div class="fl">${fac?"Proposed rating":"Status"}</div>${ratingEl}</div></div><div class="field-full"><div class="fl">Milestones this year</div>${milHtml}</div></div></div>`;
+  const facSec=fac?`<div class="sgrp sgrp-fac"><div class="sgrp-hdr" onclick="toggleSec(this)"><span class="sgrp-title">Faculty Assessment</span><span class="sgrp-ei">&#9660;</span></div><div class="sgrp-body"><div class="grid2"><div class="field"><div class="fl">SGA performance</div>${makeTA(idx,"sga",s.sga)}</div><div class="field"><div class="fl">Advising relationship</div>${makeTA(idx,"advising",s.advising)}</div></div><div class="field-full"><div class="fl">Research &amp; dissertation progress</div>${makeTA(idx,"research_fac",s.research_fac)}</div>${isWarn?`<div class="field-full"><div class="fl">Issue summary &amp; next steps</div>${makeTA(idx,"marginalNote",s.marginalNote)}</div>`:""}<div class="field-full"><div class="fl">Proposed committee comment</div>${commentEl}</div>${officialEl}</div></div>`:"";
+  const officialOnlyBlock=!fac&&self?`<div class="sgrp sgrp-overview"><div class="sgrp-body">${officialEl}</div></div>`:"";
+  const selfSec=self?`<div class="sgrp sgrp-self"><div class="sgrp-hdr" onclick="toggleSec(this)"><span class="sgrp-title">Student Self-Evaluation</span><span class="sgrp-ei">&#9660;</span></div><div class="sgrp-body"><div class="field-full"><div class="fl">Coursework this year</div>${makeTA(idx,"coursework",s.coursework)}</div><div class="field-full"><div class="fl">Publications</div>${makeTA(idx,"publications",s.publications)}</div><div class="field-full"><div class="fl">Conference papers &amp; talks</div>${makeTA(idx,"talks",s.talks)}</div><div class="grid2"><div class="field"><div class="fl">Grants &amp; fellowships</div>${makeTA(idx,"grants",s.grants)}</div><div class="field"><div class="fl">Awards</div>${makeTA(idx,"awards",s.awards)}</div></div><div class="field-full"><div class="fl">Other notable achievements</div>${makeTA(idx,"other",s.other)}</div></div></div>`:"";
+  const hasFN=fac&&!isEmpty(s.nextYear_fac);const hasSN=self&&(!isEmpty(s.courses_next)||!isEmpty(s.research_next)||!isEmpty(s.milestones_next)||!isEmpty(s.goals_next));
+  const nextSec=(hasFN||hasSN)?`<div class="sgrp sgrp-next"><div class="sgrp-hdr" onclick="toggleSec(this)"><span class="sgrp-title">Plans for Next Academic Year</span><span class="sgrp-ei">&#9660;</span></div><div class="sgrp-body">${hasFN?`<div class="field-full"><div class="fl">Faculty's plan</div>${makeTA(idx,"nextYear_fac",s.nextYear_fac)}</div>`:""}${self?`<div class="grid2"><div class="field"><div class="fl">Courses</div>${makeTA(idx,"courses_next",s.courses_next)}</div><div class="field"><div class="fl">Milestones</div>${makeTA(idx,"milestones_next",s.milestones_next)}</div></div><div class="field-full"><div class="fl">Research</div>${makeTA(idx,"research_next",s.research_next)}</div><div class="field-full"><div class="fl">Other goals</div>${makeTA(idx,"goals_next",s.goals_next)}</div>`:""}</div></div>`:"";
+  const fbSec=self&&!isEmpty(s.feedback)?`<div class="sgrp sgrp-feedback"><div class="sgrp-hdr" onclick="toggleSec(this)"><span class="sgrp-title">Program Feedback</span><span class="sgrp-ei">&#9660;</span></div><div class="sgrp-body"><div class="field-full">${makeTA(idx,"feedback",s.feedback)}</div></div></div>`:"";
+  return`<div class="card" id="c${idx}"><div class="ch" onclick="tog(${idx})"><div class="av" style="background:${ac.bg};color:${ac.c}">${ini(s.name)}</div><div class="cm"><div class="cn">${s.name}</div><div class="ca">${s.advisor}</div></div><div class="badges">${statusBadge(s.status)}${ratingBadge(s.rating)}</div><span class="ei">&#9660;</span></div><div class="body"><div class="edit-hint">Click any field to edit &nbsp;&middot;&nbsp; Amber border = edited this session</div>${overviewSec}${facSec}${officialOnlyBlock}${selfSec}${nextSec}${fbSec}</div></div>`;
+}
+
+function buildText(indices){return indices.map(i=>{const s=data[i];const sep="─".repeat(60);const div="═".repeat(60);const fac=hasFac(s),self=hasSelf(s);let out=[div,`STUDENT: ${s.name}`,`ADVISOR: ${s.advisor}`,`STATUS: ${s.status}`,`RATING: ${s.rating}`,div];if(s.official_comment&&s.official_comment.trim())out.push("ACADEMIC REVIEW COMMITTEE OFFICIAL COMMENT:\n"+s.official_comment);const allMs=[...new Set([...(s.milestones_fac||[]),...(s.milestones_self||[])])];if(allMs.length)out.push("MILESTONES THIS YEAR:\n  "+allMs.join("\n  "));if(fac){out.push(sep,"[FACULTY ASSESSMENT]");if(s.research_fac)out.push("Research & dissertation progress:\n"+s.research_fac);if(s.sga)out.push("SGA performance:\n"+s.sga);if(s.advising)out.push("Advising relationship:\n"+s.advising);if(s.marginalNote)out.push("Issue summary & next steps:\n"+s.marginalNote);if(s.comment)out.push("Proposed committee comment:\n"+s.comment);if(s.nextYear_fac)out.push("Faculty plan for next academic year:\n"+s.nextYear_fac);}if(self){out.push(sep,"[STUDENT SELF-EVALUATION]");if(s.coursework&&!isEmpty(s.coursework))out.push("Coursework:\n"+s.coursework);if(s.publications&&!isEmpty(s.publications))out.push("Publications:\n"+s.publications);if(s.talks&&!isEmpty(s.talks))out.push("Conference papers & talks:\n"+s.talks);if(s.grants&&!isEmpty(s.grants))out.push("Grants & fellowships:\n"+s.grants);if(s.awards&&!isEmpty(s.awards))out.push("Awards:\n"+s.awards);if(s.other&&!isEmpty(s.other))out.push("Other notable achievements:\n"+s.other);const hn=!isEmpty(s.courses_next)||!isEmpty(s.research_next)||!isEmpty(s.milestones_next)||!isEmpty(s.goals_next);if(hn){out.push(sep,"[NEXT ACADEMIC YEAR]");if(!isEmpty(s.courses_next))out.push("Courses:\n"+s.courses_next);if(!isEmpty(s.research_next))out.push("Research:\n"+s.research_next);if(!isEmpty(s.milestones_next))out.push("Milestones:\n"+s.milestones_next);if(!isEmpty(s.goals_next))out.push("Other goals:\n"+s.goals_next);}if(s.feedback&&!isEmpty(s.feedback))out.push(sep,"[PROGRAM FEEDBACK]\n"+s.feedback);}else if(fac&&s.nextYear_fac){out.push(sep,"[NEXT ACADEMIC YEAR]\nFaculty plan:\n"+s.nextYear_fac);}return out.join("\n\n");}).join("\n\n\n");}
+
+function buildCSV(indices){const fields=["name","advisor","status","rating","official_comment","milestones_fac","milestones_self","research_fac","sga","advising","marginalNote","comment","nextYear_fac","coursework","publications","talks","grants","awards","other","courses_next","research_next","milestones_next","goals_next","feedback"];const labels=["Name","Advisor","Status","Rating","Official Committee Comment","Milestones (Faculty)","Milestones (Student)","Research & Dissertation Progress","SGA Performance","Advising Relationship","Issue Summary & Next Steps","Proposed Committee Comment","Faculty Plan — Next Year","Coursework This Year","Publications","Conference Papers & Talks","Grants & Fellowships","Awards","Other Notable Achievements","Next Year — Courses","Next Year — Research","Next Year — Milestones","Next Year — Other Goals","Program Feedback"];const esc=v=>{if(v===null||v===undefined)return'""'  ;const s=Array.isArray(v)?v.join("; "):String(v);return'"'  +s.replace(/"/g,'""')+'"'  ;};return[labels.map(l=>'"'+l+'"'  ).join(","),...indices.map(i=>fields.map(f=>esc(data[i][f])).join(","))].join("\r\n");}
+
+function download(content,filename,mime){const blob=new Blob([content],{type:mime});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download=filename;a.click();URL.revokeObjectURL(url);}
+window.exportAll=function(mode){const idx=data.map((_,i)=>i);if(mode==="copy")navigator.clipboard.writeText(buildText(idx)).then(()=>showToast("All "+idx.length+" students copied"));else if(mode==="txt"){download(buildText(idx),"NetSI_Annual_Review_Spring2026.txt","text/plain");showToast("Downloaded .txt");}else if(mode==="csv"){download(buildCSV(idx),"NetSI_Annual_Review_Spring2026.csv","text/csv");showToast("Downloaded .csv");}};
+window.exportCurrent=function(){if(!visibleIndices.length){showToast("No students currently visible");return;}navigator.clipboard.writeText(buildText(visibleIndices)).then(()=>showToast(visibleIndices.length+" student(s) copied"));};
+
+function renderStudents(list,idxMap){
+  visibleIndices=idxMap;
+  const container=document.getElementById("sl");const sb=document.getElementById("sb");
+  const fac=list.filter(s=>hasFac(s));const sat=fac.filter(s=>s.rating==="Satisfactory").length;const marg=fac.filter(s=>s.rating==="Marginal").length;const selfOnly=list.filter(s=>!hasFac(s)&&hasSelf(s)).length;
+  sb.innerHTML=`<span class="stat">Showing <strong>${list.length}</strong> students</span><span class="stat">Faculty reviews: <strong>${fac.length}</strong></span><span class="stat">Satisfactory: <strong>${sat}</strong></span>`+(marg>0?`<span class="stat">Marginal: <strong style="color:#854F0B">${marg}</strong></span>`:"")+( selfOnly>0?`<span class="stat">Self-eval only: <strong>${selfOnly}</strong></span>`:"");
+  if(!list.length){container.innerHTML='<div class="nr">No students match the current filters.</div>';return;}
+  container.innerHTML=list.map((s,li)=>buildCard(s,idxMap[li])).join("");
+  container.querySelectorAll("textarea").forEach(ta=>{autoH(ta);ta.addEventListener("input",()=>{autoH(ta);const idx=+ta.dataset.idx,key=ta.dataset.key;data[idx][key]=ta.value;if(key!=="official_comment"){const f=ta.closest(".field,.field-full");if(f)f.classList.add("edited");}});});
+  container.querySelectorAll("select.rating-sel").forEach(sel=>{sel.addEventListener("change",()=>{data[+sel.dataset.idx].rating=sel.value;});});
+}
+
+function getFiltered(){const srch=document.getElementById("srch").value.toLowerCase();const fr=document.getElementById("fr").value;const fs=document.getElementById("fs").value;const indices=[],list=[];data.forEach((s,i)=>{const ms=!srch||s.name.toLowerCase().includes(srch)||s.advisor.toLowerCase().includes(srch);const mr=!fr||(fr==="none"?!hasFac(s):s.rating===fr);const mst=!fs||s.status===fs;if(ms&&mr&&mst){list.push(s);indices.push(i);}});return{list,indices};}
+
+function init(){
+  ["srch","fr","fs"].forEach(id=>{document.getElementById(id).addEventListener(id==="srch"?"input":"change",()=>{const{list,indices}=getFiltered();renderStudents(list,indices);});});
+}
+
+// Load data from data.json
+fetch("data.json")
+  .then(r=>{
+    if(!r.ok)throw new Error(`HTTP ${r.status}: Could not load data.json`);
+    return r.json();
+  })
+  .then(d=>{
+    data=d;
+    document.getElementById("tc").textContent=data.filter(s=>hasFac(s)).length;
+    init();
+    const{list,indices}=getFiltered();
+    renderStudents(list,indices);
+  })
+  .catch(err=>{
+    document.getElementById("sl").innerHTML=`
+      <div class="error-box">
+        <strong>Could not load student data</strong>
+        <p>The page could not find <code>data.json</code> in the same folder. This usually means one of two things:</p>
+        <br>
+        <p><strong>If you're opening this file locally</strong> (double-clicking the HTML file on your computer): browsers block local file loading for security reasons. Open the file through a local server instead, or use the self-contained version.</p>
+        <br>
+        <p><strong>If this is on GitHub Pages</strong>: make sure <code>data.json</code> is uploaded to the same repository folder as <code>index.html</code>.</p>
+        <br>
+        <p style="color:#5a5a56;font-size:12px">Technical error: ${err.message}</p>
+      </div>`;
+  });
+</script>
+</body>
+</html>
