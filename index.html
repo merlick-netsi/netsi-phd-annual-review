@@ -70,6 +70,8 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
 .ms-tag{font-size:11px;padding:3px 9px;border-radius:8px;background:#E6F1FB;color:#0C447C}
 .hl-box{background:#f7f7f5;border-left:3px solid #85B7EB;padding:8px 12px;border-radius:0 8px 8px 0}
 .hlw-box{background:#FAEEDA;border-left:3px solid #EF9F27;padding:8px 12px;border-radius:0 8px 8px 0}
+.extra-comment-box{margin-top:10px;padding:10px 12px;border-radius:8px;background:#E6F1FB;border:.5px solid #85B7EB}
+.extra-comment-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:#0C447C;margin-bottom:6px}
 textarea{width:100%;font-size:13px;color:#1a1a18;background:#fff;border:.5px solid transparent;border-radius:8px;padding:5px 7px;line-height:1.6;resize:vertical;font-family:inherit;min-height:36px;transition:border-color .1s;outline:none}
 textarea:hover{border-color:rgba(0,0,0,.12)}
 textarea:focus{border-color:rgba(0,0,0,.22);background:#f7f7f5}
@@ -120,7 +122,7 @@ select.rating-sel{font-size:13px;font-family:inherit;padding:5px 9px;border-radi
   </div>
 </div>
 <script>
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwMofO69f2lAkb02G5W0pHy0vKq6PTkpMpTWjYmdveLe9yqdjENS3yVeRCId0N1GV7Vcw/exec";
+const APPS_SCRIPT_URL = "";
 
 const ADVISOR_COLORS = {
   "Dima Krioukov":{bg:"#EEEDFE",c:"#3C3489"},
@@ -149,6 +151,22 @@ function hasSelf(s){return ['publications','coursework','talks','grants','awards
 function isEmpty(v){return !v||["null","—","N/A","n/a","NA","None","none","","-"].includes(String(v).trim());}
 function showToast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2400);}
 function autoH(ta){ta.style.height="auto";ta.style.height=ta.scrollHeight+"px";}
+function renderWithExtras(idx,key,val){
+  if(isEmpty(val))return`<textarea data-idx="${idx}" data-key="${key}" rows="1"></textarea>`;
+  const raw=String(val);
+  const parts=raw.split(/\n\n(?=\[Additional comments from )/);
+  if(parts.length===1)return`<textarea data-idx="${idx}" data-key="${key}" rows="1">${raw}</textarea>`;
+  let html=`<textarea data-idx="${idx}" data-key="${key}" rows="1">${parts[0]}</textarea>`;
+  for(let i=1;i<parts.length;i++){
+    const m=parts[i].match(/^\[Additional comments from ([^\]]+)\]\n\n?([\s\S]*)$/);
+    if(m){
+      html+=`<div class="extra-comment-box"><div class="extra-comment-label">Additional comments from ${m[1]}</div><div style="font-size:13px;line-height:1.6;color:#1a1a18;white-space:pre-wrap">${m[2].trim()}</div></div>`;
+    }else{
+      html+=`<div class="extra-comment-box"><div style="font-size:13px;line-height:1.6;color:#1a1a18;white-space:pre-wrap">${parts[i]}</div></div>`;
+    }
+  }
+  return html;
+}
 function makeTA(idx,key,val){const v=isEmpty(val)?"":String(val);return`<textarea data-idx="${idx}" data-key="${key}" rows="1">${v}</textarea>`;}
 function ratingBadge(r){if(r==="Satisfactory")return'<span class="bx bsat">Satisfactory</span>';if(r==="Marginal")return'<span class="bx bmrg">Marginal</span>';if(r==="Unsatisfactory")return'<span class="bx buns">Unsatisfactory</span>';return'<span class="bx bnone">No faculty review</span>';}
 function statusBadge(s){return s==="On Leave"?'<span class="bx blv">On leave</span>':"";}
@@ -175,7 +193,7 @@ function buildCard(s,idx){
   const saveRowHtml=`<div class="save-row"><button class="save-btn" onclick="saveComment(${idx},this,document.getElementById('ss${idx}'))">Save official comment to Google Sheet</button><span class="save-status" id="ss${idx}"></span></div>`;
   const officialEl=`<div class="official-wrap"><div class="official-label"><span class="official-dot"></span>Academic Review Committee Official Comment</div><div class="official-box"><textarea data-idx="${idx}" data-key="official_comment" rows="3" placeholder="Type the official committee comment here — approximately 2–3 sentences…">${s.official_comment||""}</textarea></div></div>${saveRowHtml}`;
   const overviewSec=`<div class="sgrp sgrp-overview"><div class="sgrp-hdr" onclick="toggleSec(this)"><span class="sgrp-title">Overview</span><span class="sgrp-ei">&#9660;</span></div><div class="sgrp-body"><div class="grid2"><div class="field"><div class="fl">Student status</div><p style="font-size:13px;color:#5a5a56">${s.status}</p></div><div class="field"><div class="fl">${fac?"Proposed rating":"Status"}</div>${ratingEl}</div></div><div class="field-full"><div class="fl">Milestones this year</div>${milHtml}</div></div></div>`;
-  const facSec=fac?`<div class="sgrp sgrp-fac"><div class="sgrp-hdr" onclick="toggleSec(this)"><span class="sgrp-title">Faculty Assessment</span><span class="sgrp-ei">&#9660;</span></div><div class="sgrp-body"><div class="grid2"><div class="field"><div class="fl">SGA performance</div>${makeTA(idx,"sga",s.sga)}</div><div class="field"><div class="fl">Advising relationship</div>${makeTA(idx,"advising",s.advising)}</div></div><div class="field-full"><div class="fl">Research &amp; dissertation progress</div>${makeTA(idx,"research_fac",s.research_fac)}</div>${isWarn?`<div class="field-full"><div class="fl">Issue summary &amp; next steps</div>${makeTA(idx,"marginalNote",s.marginalNote)}</div>`:""}<div class="field-full"><div class="fl">Proposed committee comment</div>${commentEl}</div>${officialEl}</div></div>`:"";
+  const facSec=fac?`<div class="sgrp sgrp-fac"><div class="sgrp-hdr" onclick="toggleSec(this)"><span class="sgrp-title">Faculty Assessment</span><span class="sgrp-ei">&#9660;</span></div><div class="sgrp-body"><div class="grid2"><div class="field"><div class="fl">SGA performance</div>${makeTA(idx,"sga",s.sga)}</div><div class="field"><div class="fl">Advising relationship</div>${makeTA(idx,"advising",s.advising)}</div></div><div class="field-full"><div class="fl">Research &amp; dissertation progress</div>${renderWithExtras(idx,"research_fac",s.research_fac)}</div>${isWarn?`<div class="field-full"><div class="fl">Issue summary &amp; next steps</div>${makeTA(idx,"marginalNote",s.marginalNote)}</div>`:""}<div class="field-full"><div class="fl">Proposed committee comment</div>${commentEl}</div>${officialEl}</div></div>`:"";
   const officialOnlyBlock=!fac?`<div class="sgrp sgrp-overview"><div class="sgrp-body">${officialEl}</div></div>`:"";
   const selfSec=self?`<div class="sgrp sgrp-self"><div class="sgrp-hdr" onclick="toggleSec(this)"><span class="sgrp-title">Student Self-Evaluation</span><span class="sgrp-ei">&#9660;</span></div><div class="sgrp-body"><div class="field-full"><div class="fl">Coursework this year</div>${makeTA(idx,"coursework",s.coursework)}</div><div class="field-full"><div class="fl">Publications</div>${makeTA(idx,"publications",s.publications)}</div><div class="field-full"><div class="fl">Conference papers &amp; talks</div>${makeTA(idx,"talks",s.talks)}</div><div class="grid2"><div class="field"><div class="fl">Grants &amp; fellowships</div>${makeTA(idx,"grants",s.grants)}</div><div class="field"><div class="fl">Awards</div>${makeTA(idx,"awards",s.awards)}</div></div><div class="field-full"><div class="fl">Other notable achievements</div>${makeTA(idx,"other",s.other)}</div></div></div>`:"";
   const hasFN=fac&&!isEmpty(s.nextYear_fac),hasSN=self&&(!isEmpty(s.courses_next)||!isEmpty(s.research_next)||!isEmpty(s.milestones_next)||!isEmpty(s.goals_next));
