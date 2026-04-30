@@ -122,7 +122,7 @@ select.rating-sel{font-size:13px;font-family:inherit;padding:5px 9px;border-radi
   </div>
 </div>
 <script>
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwMofO69f2lAkb02G5W0pHy0vKq6PTkpMpTWjYmdveLe9yqdjENS3yVeRCId0N1GV7Vcw/exec";
+const APPS_SCRIPT_URL = "";
 
 const ADVISOR_COLORS = {
   "Dima Krioukov":{bg:"#EEEDFE",c:"#3C3489"},
@@ -186,7 +186,7 @@ async function saveComment(idx,btn,statusEl){
 
 function buildCard(s,idx){
   const ac=avColor(s.advisor),fac=hasFac(s),self=hasSelf(s),isWarn=s.rating==="Marginal"||s.rating==="Unsatisfactory";
-  const allMs=[...new Set([...(s.milestones_fac||[]),...(s.milestones_self||[])])];
+  const allMs=(s.milestones_self||[]);
   const milHtml=allMs.length?'<div class="ms-wrap">'+allMs.map(m=>`<span class="ms-tag">${m}</span>`).join("")+'</div>':'<span style="font-size:13px;color:#9a9a94">None recorded</span>';
   const ratingEl=fac?`<select class="rating-sel" data-idx="${idx}" data-key="rating"><option value="Satisfactory"${s.rating==="Satisfactory"?" selected":""}>Satisfactory</option><option value="Marginal"${s.rating==="Marginal"?" selected":""}>Marginal</option><option value="Unsatisfactory"${s.rating==="Unsatisfactory"?" selected":""}>Unsatisfactory</option></select>`:ratingBadge(s.rating);
   const commentEl=isWarn?`<div class="hlw-box">${makeTA(idx,"comment",s.comment)}</div>`:`<div class="hl-box">${makeTA(idx,"comment",s.comment)}</div>`;
@@ -197,7 +197,7 @@ function buildCard(s,idx){
   const officialOnlyBlock=!fac?`<div class="sgrp sgrp-overview"><div class="sgrp-body">${officialEl}</div></div>`:"";
   const selfSec=self?`<div class="sgrp sgrp-self"><div class="sgrp-hdr" onclick="toggleSec(this)"><span class="sgrp-title">Student Self-Evaluation</span><span class="sgrp-ei">&#9660;</span></div><div class="sgrp-body"><div class="field-full"><div class="fl">Coursework this year</div>${makeTA(idx,"coursework",s.coursework)}</div><div class="field-full"><div class="fl">Publications</div>${makeTA(idx,"publications",s.publications)}</div><div class="field-full"><div class="fl">Conference papers &amp; talks</div>${makeTA(idx,"talks",s.talks)}</div><div class="grid2"><div class="field"><div class="fl">Grants &amp; fellowships</div>${makeTA(idx,"grants",s.grants)}</div><div class="field"><div class="fl">Awards</div>${makeTA(idx,"awards",s.awards)}</div></div><div class="field-full"><div class="fl">Other notable achievements</div>${makeTA(idx,"other",s.other)}</div></div></div>`:"";
   const hasFN=fac&&!isEmpty(s.nextYear_fac),hasSN=self&&(!isEmpty(s.courses_next)||!isEmpty(s.research_next)||!isEmpty(s.milestones_next)||!isEmpty(s.goals_next));
-  const nextSec=(hasFN||hasSN)?`<div class="sgrp sgrp-next"><div class="sgrp-hdr" onclick="toggleSec(this)"><span class="sgrp-title">Plans for Next Academic Year</span><span class="sgrp-ei">&#9660;</span></div><div class="sgrp-body">${hasFN?`<div class="field-full"><div class="fl">Faculty's plan</div>${makeTA(idx,"nextYear_fac",s.nextYear_fac)}</div>`:""}${self?`<div class="grid2"><div class="field"><div class="fl">Courses</div>${makeTA(idx,"courses_next",s.courses_next)}</div><div class="field"><div class="fl">Milestones</div>${makeTA(idx,"milestones_next",s.milestones_next)}</div></div><div class="field-full"><div class="fl">Research</div>${makeTA(idx,"research_next",s.research_next)}</div><div class="field-full"><div class="fl">Other goals</div>${makeTA(idx,"goals_next",s.goals_next)}</div>`:""}</div></div>`:"";
+  const nextSec=(hasFN||hasSN)?`<div class="sgrp sgrp-next"><div class="sgrp-hdr" onclick="toggleSec(this)"><span class="sgrp-title">Plans for Next Academic Year</span><span class="sgrp-ei">&#9660;</span></div><div class="sgrp-body">${hasFN?`<div class="field-full"><div class="fl" style="color:#085041">Faculty&#39;s Plan</div>${makeTA(idx,"nextYear_fac",s.nextYear_fac)}</div>`:""} ${hasSN?`<div class="field-full" style="padding-bottom:0"><div class="fl" style="color:#3C3489;padding:12px 0 6px 0">Student&#39;s Plan</div></div><div class="grid2"><div class="field"><div class="fl">Courses</div>${makeTA(idx,"courses_next",s.courses_next)}</div><div class="field"><div class="fl">Milestones</div>${makeTA(idx,"milestones_next",s.milestones_next)}</div></div><div class="field-full"><div class="fl">Research</div>${makeTA(idx,"research_next",s.research_next)}</div><div class="field-full"><div class="fl">Other goals</div>${makeTA(idx,"goals_next",s.goals_next)}</div>`:""}</div></div>`:"";
   return`<div class="card" id="c${idx}"><div class="ch" onclick="tog(${idx})"><div class="av" style="background:${ac.bg};color:${ac.c}">${ini(s.name)}</div><div class="cm"><div class="cn">${s.name}</div><div class="ca">${s.advisor}</div></div><div class="badges">${statusBadge(s.status)}${ratingBadge(s.rating)}</div><span class="ei">&#9660;</span></div><div class="body"><div class="edit-hint">Click any field to edit &nbsp;&middot;&nbsp; Amber border = edited this session</div>${overviewSec}${facSec}${officialOnlyBlock}${selfSec}${nextSec}</div></div>`;
 }
 
